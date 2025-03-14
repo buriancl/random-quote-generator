@@ -15,6 +15,9 @@
     --tag-hover-color: white;
     --heading-color: white;
     --label-color: white;
+    
+    /* Default background pattern */
+    --bg-pattern: none;
 }
 
 [data-theme="dark"] {
@@ -44,12 +47,14 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    background-image: var(--bg-pattern), linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+    background-size: cover;
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     color: var(--text-color);
-    transition: background 0.5s ease;
+    transition: background 1s ease, background-image 1s ease;
 }
 
 /* Container Styles */
@@ -108,9 +113,11 @@ label {
 /* Theme Toggle Styles */
 .theme-toggle {
     margin-left: 1rem;
+    display: flex;
+    gap: 0.5rem;
 }
 
-#theme-toggle-btn {
+#theme-toggle-btn, #bg-change-btn {
     background-color: transparent;
     border: none;
     color: var(--heading-color);
@@ -126,8 +133,22 @@ label {
     height: 40px;
 }
 
-#theme-toggle-btn:hover {
+#theme-toggle-btn:hover, #bg-change-btn:hover {
     background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Animation for background change button */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.rotate-animation {
+    animation: rotate 1s ease;
 }
 
 /* Quote Box Styles */

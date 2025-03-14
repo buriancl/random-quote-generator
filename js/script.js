@@ -15,6 +15,103 @@ function toggleTheme() {
 
   // Save preference to localStorage
   localStorage.setItem(STORAGE_KEY, newTheme);
+
+  // Update background for new theme
+  const themeBackgrounds = backgrounds.filter((bg) => bg.theme === newTheme);
+  const newBackground = themeBackgrounds[0]; // Default to first background of new theme
+
+  if (newBackground) {
+    currentBackgroundIndex = backgrounds.indexOf(newBackground);
+    applyBackground(newBackground);
+    localStorage.setItem(BG_STORAGE_KEY, currentBackgroundIndex);
+  }
+} // Current background index
+let currentBackgroundIndex = 0;
+
+// Function to change background
+function changeBackground() {
+  // Get current theme
+  const currentTheme =
+    document.documentElement.getAttribute("data-theme") || LIGHT_THEME;
+
+  // Get all backgrounds for the current theme
+  const themeBackgrounds = backgrounds.filter(
+    (bg) => bg.theme === currentTheme
+  );
+
+  // Get a random background that's different from the current one
+  let newIndex;
+  do {
+    newIndex = Math.floor(Math.random() * themeBackgrounds.length);
+  } while (
+    themeBackgrounds.length > 1 &&
+    themeBackgrounds[newIndex] === backgrounds[currentBackgroundIndex]
+  );
+
+  // Get the new background
+  const newBackground = themeBackgrounds[newIndex];
+
+  // Find the overall index of this background
+  currentBackgroundIndex = backgrounds.findIndex(
+    (bg) =>
+      bg.start === newBackground.start &&
+      bg.end === newBackground.end &&
+      bg.pattern === newBackground.pattern
+  );
+
+  // Apply the new background
+  applyBackground(newBackground);
+
+  // Save to localStorage
+  localStorage.setItem(BG_STORAGE_KEY, currentBackgroundIndex);
+
+  // Add animation to the button
+  bgChangeBtn.querySelector("i").classList.add("rotate-animation");
+
+  // Remove animation after it completes
+  setTimeout(() => {
+    bgChangeBtn.querySelector("i").classList.remove("rotate-animation");
+  }, 1000);
+}
+
+// Function to apply a specific background
+function applyBackground(background) {
+  document.documentElement.style.setProperty(
+    "--bg-gradient-start",
+    background.start
+  );
+  document.documentElement.style.setProperty(
+    "--bg-gradient-end",
+    background.end
+  );
+  document.documentElement.style.setProperty(
+    "--bg-pattern",
+    background.pattern
+  );
+}
+
+// Function to initialize background from saved preference
+function initBackground() {
+  // Get saved background index from localStorage
+  const savedBgIndex = localStorage.getItem(BG_STORAGE_KEY);
+
+  if (savedBgIndex !== null && backgrounds[savedBgIndex]) {
+    // Apply saved background
+    currentBackgroundIndex = parseInt(savedBgIndex);
+    applyBackground(backgrounds[currentBackgroundIndex]);
+  } else {
+    // Use default background (first one for current theme)
+    const currentTheme =
+      document.documentElement.getAttribute("data-theme") || LIGHT_THEME;
+    const defaultBackground = backgrounds.find(
+      (bg) => bg.theme === currentTheme
+    );
+
+    if (defaultBackground) {
+      currentBackgroundIndex = backgrounds.indexOf(defaultBackground);
+      applyBackground(defaultBackground);
+    }
+  }
 }
 
 // Function to update the theme toggle button icon
@@ -59,14 +156,127 @@ const newQuoteBtn = document.getElementById("new-quote");
 const copyQuoteBtn = document.getElementById("copy-quote");
 const tweetQuoteBtn = document.getElementById("tweet-quote");
 const themeToggleBtn = document.getElementById("theme-toggle-btn");
+const bgChangeBtn = document.getElementById("bg-change-btn");
 
 // Track available categories
 let availableCategories = [];
 
 // Theme variables
 const STORAGE_KEY = "quote-generator-theme";
+const BG_STORAGE_KEY = "quote-generator-background";
 const DARK_THEME = "dark";
 const LIGHT_THEME = "light";
+
+// Background options
+const backgrounds = [
+  // Gradients - Light Theme
+  {
+    type: "gradient",
+    theme: LIGHT_THEME,
+    start: "#667eea",
+    end: "#764ba2",
+    pattern: "none",
+  },
+  {
+    type: "gradient",
+    theme: LIGHT_THEME,
+    start: "#4facfe",
+    end: "#00f2fe",
+    pattern: "none",
+  },
+  {
+    type: "gradient",
+    theme: LIGHT_THEME,
+    start: "#13547a",
+    end: "#80d0c7",
+    pattern: "none",
+  },
+  {
+    type: "gradient",
+    theme: LIGHT_THEME,
+    start: "#ff758c",
+    end: "#ff7eb3",
+    pattern: "none",
+  },
+  {
+    type: "gradient",
+    theme: LIGHT_THEME,
+    start: "#f83600",
+    end: "#f9d423",
+    pattern: "none",
+  },
+  // Patterns - Light Theme
+  {
+    type: "pattern",
+    theme: LIGHT_THEME,
+    start: "#6a85b6",
+    end: "#bac8e0",
+    pattern:
+      "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.2' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E\")",
+  },
+  {
+    type: "pattern",
+    theme: LIGHT_THEME,
+    start: "#3f4c6b",
+    end: "#606c88",
+    pattern:
+      "url(\"data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.2'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+  },
+
+  // Gradients - Dark Theme
+  {
+    type: "gradient",
+    theme: DARK_THEME,
+    start: "#1a1a2e",
+    end: "#16213e",
+    pattern: "none",
+  },
+  {
+    type: "gradient",
+    theme: DARK_THEME,
+    start: "#0f0c29",
+    end: "#302b63",
+    pattern: "none",
+  },
+  {
+    type: "gradient",
+    theme: DARK_THEME,
+    start: "#232526",
+    end: "#414345",
+    pattern: "none",
+  },
+  {
+    type: "gradient",
+    theme: DARK_THEME,
+    start: "#000046",
+    end: "#1cb5e0",
+    pattern: "none",
+  },
+  {
+    type: "gradient",
+    theme: DARK_THEME,
+    start: "#0f2027",
+    end: "#203a43",
+    pattern: "none",
+  },
+  // Patterns - Dark Theme
+  {
+    type: "pattern",
+    theme: DARK_THEME,
+    start: "#141e30",
+    end: "#243b55",
+    pattern:
+      "url(\"data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='3'/%3E%3Ccircle cx='13' cy='13' r='3'/%3E%3C/g%3E%3C/svg%3E\")",
+  },
+  {
+    type: "pattern",
+    theme: DARK_THEME,
+    start: "#000000",
+    end: "#434343",
+    pattern:
+      "url(\"data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")",
+  },
+];
 
 // API URLs (multiple options to try)
 const apiOptions = [
@@ -412,11 +622,15 @@ newQuoteBtn.addEventListener("click", getRandomQuote);
 copyQuoteBtn.addEventListener("click", copyQuote);
 categorySelector.addEventListener("change", getRandomQuote);
 themeToggleBtn.addEventListener("click", toggleTheme);
+bgChangeBtn.addEventListener("click", changeBackground);
 
 // Initialize the app
 document.addEventListener("DOMContentLoaded", () => {
   // Initialize theme
   initTheme();
+
+  // Initialize background
+  initBackground();
 
   // First fetch categories, then get a random quote
   fetchCategories().then(() => {
@@ -432,6 +646,17 @@ document.addEventListener("DOMContentLoaded", () => {
         document.documentElement.setAttribute("data-theme", newTheme);
         updateThemeIcon(newTheme);
         localStorage.setItem(STORAGE_KEY, newTheme);
+
+        // Update background for new theme
+        const themeBackgrounds = backgrounds.filter(
+          (bg) => bg.theme === newTheme
+        );
+        if (themeBackgrounds.length > 0) {
+          const newBackground = themeBackgrounds[0];
+          currentBackgroundIndex = backgrounds.indexOf(newBackground);
+          applyBackground(newBackground);
+          localStorage.setItem(BG_STORAGE_KEY, currentBackgroundIndex);
+        }
       });
   }
 });
