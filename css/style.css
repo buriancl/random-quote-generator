@@ -25,9 +25,37 @@ body {
 
 h1 {
     color: white;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     animation: fadeIn 1s ease-in;
+}
+
+/* Category Selector Styles */
+.category-selector {
+    margin-bottom: 1.5rem;
+    animation: fadeIn 1.2s ease-in;
+}
+
+#quote-category {
+    background-color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    margin-left: 0.5rem;
+}
+
+#quote-category:focus {
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+label {
+    color: white;
+    font-weight: 500;
 }
 
 /* Quote Box Styles */
