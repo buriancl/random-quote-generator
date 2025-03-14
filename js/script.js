@@ -1,4 +1,56 @@
-// DOM Elements
+// Function to toggle between light and dark themes
+function toggleTheme() {
+  // Get current theme or default to light
+  const currentTheme =
+    document.documentElement.getAttribute("data-theme") || LIGHT_THEME;
+
+  // Toggle theme
+  const newTheme = currentTheme === DARK_THEME ? LIGHT_THEME : DARK_THEME;
+
+  // Update HTML attribute
+  document.documentElement.setAttribute("data-theme", newTheme);
+
+  // Update button icon
+  updateThemeIcon(newTheme);
+
+  // Save preference to localStorage
+  localStorage.setItem(STORAGE_KEY, newTheme);
+}
+
+// Function to update the theme toggle button icon
+function updateThemeIcon(theme) {
+  // Clear previous icon
+  themeToggleBtn.innerHTML = "";
+
+  // Set appropriate icon
+  const icon = document.createElement("i");
+  icon.className = theme === DARK_THEME ? "fas fa-sun" : "fas fa-moon";
+  themeToggleBtn.appendChild(icon);
+}
+
+// Function to initialize theme from saved preference
+function initTheme() {
+  // Get saved theme from localStorage or use system preference as default
+  const savedTheme = localStorage.getItem(STORAGE_KEY);
+
+  if (savedTheme) {
+    // Apply saved theme
+    document.documentElement.setAttribute("data-theme", savedTheme);
+    updateThemeIcon(savedTheme);
+  } else {
+    // Check for system preference
+    const prefersDark =
+      window.matchMedia &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const defaultTheme = prefersDark ? DARK_THEME : LIGHT_THEME;
+
+    document.documentElement.setAttribute("data-theme", defaultTheme);
+    updateThemeIcon(defaultTheme);
+
+    // Save for future visits
+    localStorage.setItem(STORAGE_KEY, defaultTheme);
+  }
+} // DOM Elements
 const quoteText = document.getElementById("quote-text");
 const authorText = document.getElementById("author");
 const tagsElement = document.getElementById("tags");
@@ -6,9 +58,15 @@ const categorySelector = document.getElementById("quote-category");
 const newQuoteBtn = document.getElementById("new-quote");
 const copyQuoteBtn = document.getElementById("copy-quote");
 const tweetQuoteBtn = document.getElementById("tweet-quote");
+const themeToggleBtn = document.getElementById("theme-toggle-btn");
 
 // Track available categories
 let availableCategories = [];
+
+// Theme variables
+const STORAGE_KEY = "quote-generator-theme";
+const DARK_THEME = "dark";
+const LIGHT_THEME = "light";
 
 // API URLs (multiple options to try)
 const apiOptions = [
@@ -353,11 +411,27 @@ function displayTags(tags) {
 newQuoteBtn.addEventListener("click", getRandomQuote);
 copyQuoteBtn.addEventListener("click", copyQuote);
 categorySelector.addEventListener("change", getRandomQuote);
+themeToggleBtn.addEventListener("click", toggleTheme);
 
 // Initialize the app
 document.addEventListener("DOMContentLoaded", () => {
+  // Initialize theme
+  initTheme();
+
   // First fetch categories, then get a random quote
   fetchCategories().then(() => {
     getRandomQuote();
   });
+
+  // Listen for system theme changes
+  if (window.matchMedia) {
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (e) => {
+        const newTheme = e.matches ? DARK_THEME : LIGHT_THEME;
+        document.documentElement.setAttribute("data-theme", newTheme);
+        updateThemeIcon(newTheme);
+        localStorage.setItem(STORAGE_KEY, newTheme);
+      });
+  }
 });
