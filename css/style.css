@@ -1,4 +1,40 @@
 /* Base Styles */
+:root {
+    /* Light mode (default) colors */
+    --bg-gradient-start: #667eea;
+    --bg-gradient-end: #764ba2;
+    --card-bg: white;
+    --text-color: #333;
+    --text-secondary: #555;
+    --quote-marks-color: #764ba2;
+    --button-primary: #764ba2;
+    --button-secondary: #667eea;
+    --tag-bg: #e9ecef;
+    --tag-color: #495057;
+    --tag-hover-bg: #667eea;
+    --tag-hover-color: white;
+    --heading-color: white;
+    --label-color: white;
+}
+
+[data-theme="dark"] {
+    /* Dark mode colors */
+    --bg-gradient-start: #1a1a2e;
+    --bg-gradient-end: #16213e;
+    --card-bg: #1f2937;
+    --text-color: #e5e7eb;
+    --text-secondary: #d1d5db;
+    --quote-marks-color: #9c59b6;
+    --button-primary: #8a2be2;
+    --button-secondary: #4b6cb7;
+    --tag-bg: #374151;
+    --tag-color: #d1d5db;
+    --tag-hover-bg: #4b6cb7;
+    --tag-hover-color: white;
+    --heading-color: #e5e7eb;
+    --label-color: #e5e7eb;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -7,12 +43,13 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #333;
+    color: var(--text-color);
+    transition: background 0.5s ease;
 }
 
 /* Container Styles */
@@ -24,20 +61,29 @@ body {
 }
 
 h1 {
-    color: white;
+    color: var(--heading-color);
     margin-bottom: 1.5rem;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     animation: fadeIn 1s ease-in;
 }
 
-/* Category Selector Styles */
-.category-selector {
+/* App Controls Layout */
+.app-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 1.5rem;
     animation: fadeIn 1.2s ease-in;
 }
 
+/* Category Selector Styles */
+.category-selector {
+    flex-grow: 1;
+    text-align: left;
+}
+
 #quote-category {
-    background-color: white;
+    background-color: var(--card-bg);
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 5px;
@@ -46,6 +92,7 @@ h1 {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     margin-left: 0.5rem;
+    color: var(--text-color);
 }
 
 #quote-category:focus {
@@ -54,17 +101,43 @@ h1 {
 }
 
 label {
-    color: white;
+    color: var(--label-color);
     font-weight: 500;
+}
+
+/* Theme Toggle Styles */
+.theme-toggle {
+    margin-left: 1rem;
+}
+
+#theme-toggle-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--heading-color);
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+}
+
+#theme-toggle-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Quote Box Styles */
 .quote-box {
-    background-color: white;
+    background-color: var(--card-bg);
     padding: 2rem;
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
     animation: slideUp 0.5s ease-out;
+    transition: background-color 0.5s ease, box-shadow 0.5s ease;
 }
 
 .quote-content {
@@ -73,7 +146,7 @@ label {
 }
 
 .fa-quote-left, .fa-quote-right {
-    color: #764ba2;
+    color: var(--quote-marks-color);
     font-size: 1.5rem;
     opacity: 0.6;
 }
@@ -95,13 +168,14 @@ label {
     line-height: 1.6;
     margin: 1.5rem 0;
     transition: all 0.3s ease;
+    color: var(--text-color);
 }
 
 .quote-author {
     font-style: italic;
     text-align: right;
     margin-bottom: 0.75rem;
-    color: #555;
+    color: var(--text-secondary);
 }
 
 .quote-tags {
@@ -117,8 +191,8 @@ label {
 
 .tag {
     display: inline-block;
-    background-color: #e9ecef;
-    color: #495057;
+    background-color: var(--tag-bg);
+    color: var(--tag-color);
     font-size: 0.75rem;
     padding: 0.25rem 0.5rem;
     margin: 0.1rem;
@@ -128,8 +202,8 @@ label {
 }
 
 .tag:hover {
-    background-color: #667eea;
-    color: white;
+    background-color: var(--tag-hover-bg);
+    color: var(--tag-hover-color);
 }
 
 /* Button Styles */
@@ -148,14 +222,14 @@ button, #tweet-quote {
 }
 
 #new-quote {
-    background-color: #764ba2;
+    background-color: var(--button-primary);
     color: white;
     flex-grow: 1;
     margin-right: 10px;
 }
 
 #copy-quote, #tweet-quote {
-    background-color: #667eea;
+    background-color: var(--button-secondary);
     color: white;
     width: 40px;
     height: 40px;
@@ -169,6 +243,7 @@ button, #tweet-quote {
 button:hover, #tweet-quote:hover {
     transform: translateY(-3px);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0.9;
 }
 
 button:active, #tweet-quote:active {
