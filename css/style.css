@@ -81,13 +81,23 @@ h1 {
     animation: fadeIn 1.2s ease-in;
 }
 
-/* Category Selector Styles */
-.category-selector {
+.selector-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
     flex-grow: 1;
-    text-align: left;
 }
 
-#quote-category {
+/* Category and API Selector Styles */
+.category-selector, .api-selector {
+    text-align: left;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+#quote-category, #quote-api {
     background-color: var(--card-bg);
     padding: 0.5rem 1rem;
     border: none;
@@ -98,9 +108,10 @@ h1 {
     transition: all 0.3s ease;
     margin-left: 0.5rem;
     color: var(--text-color);
+    flex-grow: 1;
 }
 
-#quote-category:focus {
+#quote-category:focus, #quote-api:focus {
     outline: none;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
@@ -108,6 +119,7 @@ h1 {
 label {
     color: var(--label-color);
     font-weight: 500;
+    min-width: 85px;
 }
 
 /* Theme Toggle Styles */
