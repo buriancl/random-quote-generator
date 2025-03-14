@@ -13,6 +13,13 @@
   <body>
     <div class="container">
       <h1>Random Quote Generator</h1>
+      <div class="category-selector">
+        <label for="quote-category">Choose a category:</label>
+        <select id="quote-category">
+          <option value="">All Categories</option>
+          <!-- Categories will be populated by JavaScript -->
+        </select>
+      </div>
       <div class="quote-box">
         <div class="quote-content">
           <i class="fas fa-quote-left"></i>
@@ -21,6 +28,9 @@
         </div>
         <div class="quote-author">
           <p id="author">Author</p>
+        </div>
+        <div class="quote-tags">
+          <p id="tags"></p>
         </div>
         <div class="buttons">
           <button id="new-quote">New Quote</button>
